@@ -158,7 +158,7 @@ public class Diagnostic_External_Storage extends CordovaPlugin{
                 detail.put("filePath", "file://"+directory);
                 detail.put("canWrite", f.canWrite());
                 detail.put("freeSpace", getFreeSpaceInBytes(directory));
-                detail.put("availableSize", getAvailableSize(directory));
+                detail.put("totalSpace", getTotalSize(directory));
                 if(directory.contains("Android")){
                     detail.put("type", "application");
                 }else{
@@ -188,12 +188,12 @@ public class Diagnostic_External_Storage extends CordovaPlugin{
         }
     }
 
-    protected long getAvailableSize(String path) {
+    protected long getTotalSize(String path) {
         try {
             StatFs statFs = new StatFs(path);        
             long blockSize = statFs.getBlockSize();
             long totalSize = statFs.getBlockCount()*blockSize;
-            long availableSize = statFs.getAvailableBlocks()*blockSize;
+            // long availableSize = statFs.getAvailableBlocks()*blockSize;
             return totalSize;
         } catch (IllegalArgumentException e) {
             // The path was invalid. Just return 0 free bytes.
